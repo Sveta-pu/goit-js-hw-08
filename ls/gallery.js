@@ -1,3 +1,5 @@
+// import * as basicLightbox from 'basiclightbox';
+
 const images = [
   {
     preview:
@@ -106,3 +108,10 @@ function createGallery(container, items) {
 }
 
 createGallery(gallery, images);
+
+console.log('basicLightbox loaded?', !!window.basicLightbox);
+
+const instance = basicLightbox.create(`
+	<h1>Dynamic Content</h1>
+	<p>You can set the content of the lightbox with JS.</p>
+`);
