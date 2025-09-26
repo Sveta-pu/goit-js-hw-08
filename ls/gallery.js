@@ -1,4 +1,3 @@
-// Дані
 const images = [
   {
     preview:
@@ -67,7 +66,19 @@ const images = [
 
 const gallery = document.querySelector('.gallery');
 
-// 2) Функція рендера галереї
+gallery.addEventListener('click', event => {
+  if (event.target.nodeName !== 'IMG') return;
+
+  event.preventDefault();
+
+  const largeImageURL = event.target.dataset.source;
+
+  const instance = basicLightbox.create(`
+    <img src="${largeImageURL}" alt="${event.target.alt}" />
+  `);
+  instance.show();
+});
+
 function createGallery(container, items) {
   const fragment = document.createDocumentFragment();
 
@@ -84,29 +95,14 @@ function createGallery(container, items) {
     img.src = preview;
     img.dataset.source = original;
     img.alt = description;
-    img.loading = 'lazy';
 
     link.appendChild(img);
     li.appendChild(link);
+
     fragment.appendChild(li);
   });
 
   container.appendChild(fragment);
 }
 
-// 3) Рендеримо
 createGallery(gallery, images);
-
-// 4) Делегування події + lightbox
-gallery.addEventListener('click', event => {
-  // Клік має бути по <img>
-  if (event.target.nodeName !== 'IMG') return;
-
-  event.preventDefault(); // блокуємо перехід за <a>
-
-  const largeImageURL = event.target.dataset.source;
-  const instance = basicLightbox.create(
-    `<img src="${largeImageURL}" alt="${event.target.alt}" />`
-  );
-  instance.show();
-});
