@@ -1,3 +1,4 @@
+// Дані
 const images = [
   {
     preview:
@@ -63,3 +64,49 @@ const images = [
     description: 'Lighthouse Coast Sea',
   },
 ];
+
+const gallery = document.querySelector('.gallery');
+
+// 2) Функція рендера галереї
+function createGallery(container, items) {
+  const fragment = document.createDocumentFragment();
+
+  items.forEach(({ preview, original, description }) => {
+    const li = document.createElement('li');
+    li.classList.add('gallery-item');
+
+    const link = document.createElement('a');
+    link.classList.add('gallery-link');
+    link.href = original;
+
+    const img = document.createElement('img');
+    img.classList.add('gallery-image');
+    img.src = preview;
+    img.dataset.source = original;
+    img.alt = description;
+    img.loading = 'lazy';
+
+    link.appendChild(img);
+    li.appendChild(link);
+    fragment.appendChild(li);
+  });
+
+  container.appendChild(fragment);
+}
+
+// 3) Рендеримо
+createGallery(gallery, images);
+
+// 4) Делегування події + lightbox
+gallery.addEventListener('click', event => {
+  // Клік має бути по <img>
+  if (event.target.nodeName !== 'IMG') return;
+
+  event.preventDefault(); // блокуємо перехід за <a>
+
+  const largeImageURL = event.target.dataset.source;
+  const instance = basicLightbox.create(
+    `<img src="${largeImageURL}" alt="${event.target.alt}" />`
+  );
+  instance.show();
+});
